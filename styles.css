@@ -61,8 +61,17 @@ header {
 }
 
 @keyframes pip {
-  0%, 100% { opacity: 1; transform: scale(1) }
-  50% { opacity: 0.3; transform: scale(0.7) }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1)
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(0.7)
+  }
 }
 
 .rbtn {
@@ -109,7 +118,10 @@ header {
   flex-shrink: 0;
 }
 
-.tscroll { overflow: hidden; flex: 1; }
+.tscroll {
+  overflow: hidden;
+  flex: 1;
+}
 
 .tinner {
   display: flex;
@@ -126,8 +138,13 @@ header {
 }
 
 @keyframes tick {
-  0% { transform: translateX(0) }
-  100% { transform: translateX(-50%) }
+  0% {
+    transform: translateX(0)
+  }
+
+  100% {
+    transform: translateX(-50%)
+  }
 }
 
 main {
@@ -150,7 +167,10 @@ main {
   color: var(--muted);
 }
 
-.st em { color: var(--accent); font-style: normal; }
+.st em {
+  color: var(--accent);
+  font-style: normal;
+}
 
 .sc {
   font-family: 'Space Mono', monospace;
@@ -181,7 +201,9 @@ main {
   transition: background .2s;
 }
 
-.card:hover { background: #121221; }
+.card:hover {
+  background: #121221;
+}
 
 .card:hover .arr {
   opacity: 1;
@@ -191,15 +213,25 @@ main {
 .card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 2px;
   background: var(--hc, transparent);
   opacity: var(--ho, 0);
 }
 
-.c-hero { grid-column: span 7; }
-.c-tall { grid-column: span 5; }
-.c-third { grid-column: span 4; }
+.c-hero {
+  grid-column: span 7;
+}
+
+.c-tall {
+  grid-column: span 5;
+}
+
+.c-third {
+  grid-column: span 4;
+}
 
 .c-wide {
   grid-column: span 8;
@@ -208,13 +240,18 @@ main {
   gap: 20px;
 }
 
-.c-wide .wb { flex: 1; }
+.c-wide .wb {
+  flex: 1;
+}
 
-.c-sm { grid-column: span 4; }
+.c-sm {
+  grid-column: span 4;
+}
 
 .arr {
   position: absolute;
-  top: 14px; right: 14px;
+  top: 14px;
+  right: 14px;
   font-size: 0.7rem;
   color: var(--accent);
   opacity: 0;
@@ -262,11 +299,25 @@ main {
   margin-bottom: 8px;
 }
 
-.c-hero .ctitle { font-size: clamp(1.7rem, 2.6vw, 2.8rem); }
-.c-tall .ctitle { font-size: clamp(1.15rem, 1.5vw, 1.65rem); }
-.c-third .ctitle { font-size: clamp(1rem, 1.35vw, 1.45rem); }
-.c-wide .ctitle { font-size: clamp(1rem, 1.2vw, 1.3rem); }
-.c-sm .ctitle { font-size: clamp(0.95rem, 1.1vw, 1.25rem); }
+.c-hero .ctitle {
+  font-size: clamp(1.7rem, 2.6vw, 2.8rem);
+}
+
+.c-tall .ctitle {
+  font-size: clamp(1.15rem, 1.5vw, 1.65rem);
+}
+
+.c-third .ctitle {
+  font-size: clamp(1rem, 1.35vw, 1.45rem);
+}
+
+.c-wide .ctitle {
+  font-size: clamp(1rem, 1.2vw, 1.3rem);
+}
+
+.c-sm .ctitle {
+  font-size: clamp(0.95rem, 1.1vw, 1.25rem);
+}
 
 .cdesc {
   font-size: 0.82rem;
@@ -295,15 +346,27 @@ main {
   margin-top: auto;
 }
 
-.cage { color: var(--muted); }
-.ms { color: var(--border); }
-
-@keyframes flashNew {
-  0% { background: #1a2a1a; }
-  100% { background: var(--card); }
+.cage {
+  color: var(--muted);
 }
 
-.card-new { animation: flashNew 1.2s ease forwards; }
+.ms {
+  color: var(--border);
+}
+
+@keyframes flashNew {
+  0% {
+    background: #1a2a1a;
+  }
+
+  100% {
+    background: var(--card);
+  }
+}
+
+.card-new {
+  animation: flashNew 1.2s ease forwards;
+}
 
 .sgrid {
   display: grid;
@@ -328,8 +391,13 @@ main {
 }
 
 @keyframes shim {
-  0% { transform: translateX(-100%) }
-  100% { transform: translateX(100%) }
+  0% {
+    transform: translateX(-100%)
+  }
+
+  100% {
+    transform: translateX(100%)
+  }
 }
 
 .status {
@@ -388,15 +456,40 @@ footer {
 }
 
 @media(max-width:900px) {
-  .c-hero { grid-column: span 12 }
-  .c-tall { grid-column: span 6 }
-  .c-third { grid-column: span 6 }
-  .c-wide { grid-column: span 12; flex-direction: column }
-  .c-sm { grid-column: span 6 }
+  .c-hero {
+    grid-column: span 12
+  }
+
+  .c-tall {
+    grid-column: span 6
+  }
+
+  .c-third {
+    grid-column: span 6
+  }
+
+  .c-wide {
+    grid-column: span 12;
+    flex-direction: column
+  }
+
+  .c-sm {
+    grid-column: span 6
+  }
 }
 
 @media(max-width:560px) {
-  main { padding: 16px 12px 40px }
-  header { padding: 0 14px }
-  .c-tall, .c-third, .c-sm { grid-column: span 12 }
+  main {
+    padding: 16px 12px 40px
+  }
+
+  header {
+    padding: 0 14px
+  }
+
+  .c-tall,
+  .c-third,
+  .c-sm {
+    grid-column: span 12
+  }
 }

@@ -80,7 +80,6 @@ function buildCard(a, i, isNew) {
   card.style.setProperty('--ho', h.o);
   card.style.setProperty('--sc2', a.color);
   const body = `
-    ${isHot ? '<div class="htag">BREAKING</div>' : ''}
     <div class="src"><div class="sdot"></div>${a.source}</div>
     <div class="ctitle">${a.title}</div>
     ${showDesc ? `<div class="cdesc">${a.desc}</div>` : ''}

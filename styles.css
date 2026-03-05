@@ -494,3 +494,15 @@ footer {
     grid-column: span 12
   }
 }
+
+@media (orientation: landscape) {
+  header {
+    justify-content: center;
+    position: relative;
+  }
+
+  .hdr-right {
+    position: absolute;
+    right: 28px;
+  }
+}

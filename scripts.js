@@ -94,12 +94,13 @@ function buildCard(a, i, isNew) {
 function skeleton() {
   document.getElementById('container').innerHTML = `
     <div class="sgrid">
-      <div class="sk" style="grid-column:span 7;height:260px"></div>
-      <div class="sk" style="grid-column:span 5;height:128px"></div>
-      <div class="sk" style="grid-column:span 5;height:128px"></div>
-      <div class="sk" style="grid-column:span 4;height:140px"></div>
-      <div class="sk" style="grid-column:span 4;height:140px"></div>
-      <div class="sk" style="grid-column:span 4;height:140px"></div>
+      <div class="sk" style="grid-column:span 7;min-height:260px"></div>
+      <div class="sk" style="grid-column:span 5;min-height:260px"></div>
+      <div class="sk" style="grid-column:span 5;min-height:128px"></div>
+      <div class="sk" style="grid-column:span 7;min-height:128px"></div>
+      <div class="sk" style="grid-column:span 4;min-height:140px"></div>
+      <div class="sk" style="grid-column:span 4;min-height:140px"></div>
+      <div class="sk" style="grid-column:span 4;min-height:140px"></div>
     </div>`
 }
 
@@ -195,4 +196,18 @@ document.getElementById('dateStr').textContent =
   }).toUpperCase();
 
 loadAll();
-setInterval(() => loadAll(false), 5 * 60 * 1000);
+
+const REFRESH_MS = 5 * 60 * 1000;
+let countdownEnd = Date.now() + REFRESH_MS;
+setInterval(() => {
+  const rem = Math.max(0, countdownEnd - Date.now());
+  const m = Math.floor(rem / 60000);
+  const s = Math.floor((rem % 60000) / 1000);
+  const el = document.getElementById('countdown');
+  if (el) el.textContent = `UPDATE IN ${m}:${String(s).padStart(2, '0')}`;
+}, 1000);
+
+setInterval(() => {
+  loadAll(false);
+  countdownEnd = Date.now() + REFRESH_MS;
+}, REFRESH_MS);

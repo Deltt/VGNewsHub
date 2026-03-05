@@ -380,6 +380,7 @@ main {
   background: var(--card);
   position: relative;
   overflow: hidden;
+  align-self: stretch;
 }
 
 .sk::after {

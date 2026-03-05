@@ -1,13 +1,22 @@
 :root {
+  /* BACKGROUND (unchanged) */
   --bg: #06060a;
-  --card: #0e0e16;
-  --border: #1a1a28;
-  --accent: #e8ff47;
-  --red: #ff3f5e;
-  --teal: #4dffdb;
-  --text: #eeeef5;
-  --muted: #5a5a78;
-  --dim: #2a2a3e;
+
+  /* PURPLE SYSTEM (derived from #541F61) */
+  --card: #1b0f24;      /* dark purple-tinted card */
+  --border: #2a1835;    /* subtle purple border */
+  
+  /* ACCENT */
+  --accent: #FFE623;    /* gold */
+  --red: #FFE623;       /* repurpose red to gold */
+
+  /* SUPPORT */
+  --teal: #7c4d8a;      /* muted purple highlight */
+  
+  /* TEXT */
+  --text: #f5f2ff;      /* cool off-white */
+  --muted: #8e7aa3;     /* desaturated purple */
+  --dim: #4b3a5c;       /* deep muted purple */
 }
 
 * {

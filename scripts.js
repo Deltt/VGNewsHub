@@ -53,9 +53,9 @@ async function fetchFeed(src) {
 }
 
 function heat(ms) {
-  if (ms < 2 * 3600000) return { c: '#ff3f5e', o: '1' };
+  if (ms < 2 * 3600000) return { c: '#ffaa00', o: '1' };
   if (ms < 8 * 3600000) return { c: '#e8ff47', o: '0.8' };
-  if (ms < 24 * 3600000) return { c: '#4dffdb', o: '0.45' };
+  if (ms < 24 * 3600000) return { c: '#b8ff47', o: '0.45' };
   return { c: 'transparent', o: '0' }
 }
 

@@ -1,5 +1,6 @@
 const PROXY = url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
 const PROXY2 = url => `https://corsproxy.io/?${encodeURIComponent(url)}`;
+const PROXY3 = url => `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
 
 const SOURCES = [
   { name: 'Polygon', color: '#ff4500', feed: 'https://www.polygon.com/rss/index.xml' },
@@ -35,7 +36,31 @@ function parseXML(xmlStr) {
   } catch { return [] }
 }
 
+function parseRss2Json(j) {
+  if (!j || j.status !== 'ok' || !Array.isArray(j.items)) return [];
+  return j.items.map(item => {
+    const pubDate = item.pubDate || item.published || '';
+    return {
+      title: cleanText(item.title || ''),
+      desc: cleanText(item.description || item.content || '').slice(0, 300),
+      url: item.link || item.guid || '',
+      date: pubDate,
+      age: ageMs(pubDate)
+    };
+  }).filter(a => a.title && a.url);
+}
+
 async function fetchFeed(src) {
+  // Try rss2json first - reliable JSON response, no XML parsing needed
+  try {
+    const res = await fetch(PROXY3(src.feed), { signal: AbortSignal.timeout(10000) });
+    if (res.ok) {
+      const j = await res.json();
+      const items = parseRss2Json(j);
+      if (items.length) return items.map(a => ({ ...a, source: src.name, color: src.color }));
+    }
+  } catch { }
+
   for (const proxyFn of [PROXY, PROXY2]) {
     try {
       const res = await fetch(proxyFn(src.feed), { signal: AbortSignal.timeout(10000) });
@@ -170,8 +195,8 @@ async function loadAll(forceFullRender = false) {
   articles = articles.filter(a => { if (!a.url || seen.has(a.url)) return false; seen.add(a.url); return true });
 
   articles = articles
-    .filter(a => a.age < 72 * 3600000 && a.title)
-    .sort((a, b) => a.age - b.age)
+    .filter(a => a.title)
+    .sort((a, b) => a.age - b.age)  // Infinity age (no date) sorts to end
     .slice(0, 20);
 
   renderOrDiff(articles, isFirstLoad || forceFullRender);

@@ -109,7 +109,7 @@ function buildCard(a, i, isNew) {
     <div class="ctitle">${a.title}</div>
     ${showDesc ? `<div class="cdesc">${a.desc}</div>` : ''}
     <div class="cmeta">
-      <span class="cage">${fmtAge(a.age)}</span>
+      <span class="cage"${isHot ? ' style="color:var(--accent)"' : ''}>${fmtAge(a.age)}</span>
       ${a.date ? `<span class="ms">·</span><span>${new Date(a.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>` : ''}
     </div>`;
   card.innerHTML = `<div class="arr">↗</div>${cls === 'c-wide' ? `<div class="wb">${body}</div>` : body}`;
@@ -118,21 +118,48 @@ function buildCard(a, i, isNew) {
 
 function skeleton() {
   document.getElementById('container').innerHTML = `
-    <div class="sgrid">
-      <div class="sk" style="grid-column:span 7;min-height:260px"></div>
-      <div class="sk" style="grid-column:span 5;min-height:260px"></div>
-      <div class="sk" style="grid-column:span 5;min-height:128px"></div>
-      <div class="sk" style="grid-column:span 7;min-height:128px"></div>
-      <div class="sk" style="grid-column:span 4;min-height:140px"></div>
-      <div class="sk" style="grid-column:span 4;min-height:140px"></div>
-      <div class="sk" style="grid-column:span 4;min-height:140px"></div>
+    <div style="position:relative">
+      <div class="sk-overlay"><div class="sk-spinner"></div></div>
+      <div class="sgrid">
+        <div class="sk" style="grid-column:span 7;min-height:260px"></div>
+        <div class="sk" style="grid-column:span 5;min-height:260px"></div>
+        <div class="sk" style="grid-column:span 5;min-height:128px"></div>
+        <div class="sk" style="grid-column:span 7;min-height:128px"></div>
+        <div class="sk" style="grid-column:span 4;min-height:140px"></div>
+        <div class="sk" style="grid-column:span 4;min-height:140px"></div>
+        <div class="sk" style="grid-column:span 4;min-height:140px"></div>
+      </div>
     </div>`
 }
 
+let tickerX = 0;
+let tickerRAF = null;
+let tickerHalfW = 0;
+
 function updateTicker(articles) {
   const t = document.getElementById('ticker');
+  const isMobile = window.innerWidth <= 560;
+  const speed = isMobile ? 0.4 : 0.8; // px per frame
+
   const items = articles.slice(0, 16).map(a => `${a.source.toUpperCase()}: ${a.title}`);
-  t.innerHTML = [...items, ...items].map(s => `<span>▶ ${s}</span>`).join('')
+  const html = [...items, ...items].map(s => `<span>▶ ${s}</span>`).join('');
+  t.innerHTML = html;
+
+  // Wait a frame for layout so we can measure half-width
+  requestAnimationFrame(() => {
+    tickerHalfW = t.scrollWidth / 2;
+    tickerX = 0;
+
+    if (tickerRAF) cancelAnimationFrame(tickerRAF);
+
+    function step() {
+      tickerX -= speed;
+      if (tickerX <= -tickerHalfW) tickerX += tickerHalfW;
+      t.style.transform = `translateX(${tickerX}px)`;
+      tickerRAF = requestAnimationFrame(step);
+    }
+    tickerRAF = requestAnimationFrame(step);
+  });
 }
 
 function renderOrDiff(articles, forceFullRender) {
@@ -184,7 +211,9 @@ function renderOrDiff(articles, forceFullRender) {
 
 async function loadAll(forceFullRender = false) {
   const btn = document.getElementById('btn');
-  btn.disabled = true; btn.textContent = '↻';
+  if (btn.dataset.loading === 'true') return;
+  btn.dataset.loading = 'true';
+  btn.style.opacity = '0.4';
 
   if (isFirstLoad || forceFullRender) skeleton();
 
@@ -196,7 +225,7 @@ async function loadAll(forceFullRender = false) {
 
   articles = articles
     .filter(a => a.title)
-    .sort((a, b) => a.age - b.age)  // Infinity age (no date) sorts to end
+    .sort((a, b) => a.age - b.age)
     .slice(0, 20);
 
   renderOrDiff(articles, isFirstLoad || forceFullRender);
@@ -204,7 +233,8 @@ async function loadAll(forceFullRender = false) {
   if (articles.length) updateTicker(articles);
 
   isFirstLoad = false;
-  btn.disabled = false; btn.textContent = '↻ REFRESH';
+  btn.dataset.loading = 'false';
+  btn.style.opacity = '1';
 
   document.getElementById('upd').textContent =
     'UPDATED ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -223,16 +253,43 @@ document.getElementById('dateStr').textContent =
 loadAll();
 
 const REFRESH_MS = 5 * 60 * 1000;
-let countdownEnd = Date.now() + REFRESH_MS;
-setInterval(() => {
-  const rem = Math.max(0, countdownEnd - Date.now());
-  const m = Math.floor(rem / 60000);
-  const s = Math.floor((rem % 60000) / 1000);
-  const el = document.getElementById('countdown');
-  if (el) el.textContent = `UPDATE IN ${m}:${String(s).padStart(2, '0')}`;
-}, 1000);
 
-setInterval(() => {
-  loadAll(false);
-  countdownEnd = Date.now() + REFRESH_MS;
-}, REFRESH_MS);
+setInterval(() => { loadAll(false); }, REFRESH_MS);
+
+// Pull-to-refresh
+(function () {
+  let startY = 0;
+  let pulling = false;
+  const threshold = 80;
+
+  const indicator = document.createElement('div');
+  indicator.id = 'ptr';
+  indicator.innerHTML = '<div class="ptr-spinner"></div>';
+  document.body.prepend(indicator);
+
+  document.addEventListener('touchstart', e => {
+    if (window.scrollY === 0) {
+      startY = e.touches[0].clientY;
+      pulling = true;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!pulling) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy > 0) {
+      const progress = Math.min(dy / threshold, 1);
+      indicator.style.opacity = progress;
+      indicator.style.marginTop = Math.min(dy * 0.3, 32) + 'px';
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (!pulling) return;
+    pulling = false;
+    const dy = e.changedTouches[0].clientY - startY;
+    indicator.style.opacity = '0';
+    indicator.style.marginTop = '0';
+    if (dy > threshold) loadAll(true);
+  }, { passive: true });
+})();

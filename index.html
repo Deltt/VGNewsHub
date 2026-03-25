@@ -4,20 +4,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Deltt's VG News Hub</title>
+  <title>VG News Hub</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Barlow:wght@300;400;600&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    body { opacity: 0; }
+  </style>
+  <script>
+    document.fonts.ready.then(() => {
+      document.body.style.transition = 'opacity 0.15s ease';
+      document.body.style.opacity = '1';
+    });
+  </script>
 </head>
 
 <body>
 
   <header>
-    <div class="logo">DELTT's NEWS HUB</div>
+    <div class="logo">VG NEWS HUB</div>
     <div class="hdr-right">
       <div class="pip"></div>
       <button class="rbtn" id="btn" onclick="loadAll(true)">REFRESH</button>
@@ -34,7 +44,7 @@
 
   <main>
     <div class="sh">
-      <div class="st">BREAKING — <em id="dateStr"></em></div>
+      <div class="st"><em id="dateStr"></em></div>
       <div class="sc" id="count"></div>
     </div>
     <div id="container"></div>
@@ -45,7 +55,7 @@
     <span>POLYGON · IGN · KOTAKU · EUROGAMER · NINTENDO · XBOX · PLAYSTATION · VGC · GAMESPOT</span>
   </footer>
 
-  <script src="scripts.js?v=3"></script>
+  <script src="scripts.js"></script>
 </body>
 
 </html>

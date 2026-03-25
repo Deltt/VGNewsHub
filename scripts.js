@@ -112,7 +112,7 @@ function buildCard(a, i, isNew) {
       <span class="cage"${isHot ? ' style="color:var(--accent)"' : ''}>${fmtAge(a.age)}</span>
       ${a.date ? `<span class="ms">·</span><span>${new Date(a.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>` : ''}
     </div>`;
-  card.innerHTML = `<div class="arr">↗</div>${cls === 'c-wide' ? `<div class="wb">${body}</div>` : body}`;
+  card.innerHTML = `<div class="arr">+</div>${cls === 'c-wide' ? `<div class="wb">${body}</div>` : body}`;
   return card
 }
 
@@ -139,10 +139,10 @@ let tickerHalfW = 0;
 function updateTicker(articles) {
   const t = document.getElementById('ticker');
   const isMobile = window.innerWidth <= 560;
-  const speed = isMobile ? 0.4 : 0.8; // px per frame
+  const speed = isMobile ? 0.4 : 0.4; // px per frame
 
   const items = articles.slice(0, 16).map(a => `${a.source.toUpperCase()}: ${a.title}`);
-  const html = [...items, ...items].map(s => `<span>▶ ${s}</span>`).join('');
+  const html = [...items, ...items].map(s => `<span>// ${s}</span>`).join('');
   t.innerHTML = html;
 
   // Wait a frame for layout so we can measure half-width

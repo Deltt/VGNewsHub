@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Space+Mono:wght@400;700&family=Barlow:wght@300;400;600&display=swap');
+
 :root {
   --bg: #06060a;
   --card: #1b0f24;
@@ -43,8 +45,8 @@ header {
 }
 
 .logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.7rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.65rem;
   letter-spacing: 6px;
   color: var(--accent);
   text-shadow: 0 0 40px rgba(232, 255, 71, 0.25);
@@ -299,9 +301,10 @@ main {
 }
 
 .ctitle {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 1px;
-  line-height: 1.1;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.15;
   color: var(--text);
   margin-bottom: 8px;
 }
@@ -311,19 +314,19 @@ main {
 }
 
 .c-tall .ctitle {
-  font-size: clamp(1.15rem, 1.5vw, 1.65rem);
+  font-size: clamp(1.38rem, 1.8vw, 1.98rem);
 }
 
 .c-third .ctitle {
-  font-size: clamp(1rem, 1.35vw, 1.45rem);
+  font-size: clamp(1.2rem, 1.62vw, 1.74rem);
 }
 
 .c-wide .ctitle {
-  font-size: clamp(1rem, 1.2vw, 1.3rem);
+  font-size: clamp(1.2rem, 1.44vw, 1.56rem);
 }
 
 .c-sm .ctitle {
-  font-size: clamp(0.95rem, 1.1vw, 1.25rem);
+  font-size: clamp(1.14rem, 1.32vw, 1.5rem);
 }
 
 .cdesc {
@@ -547,14 +550,23 @@ footer {
     padding: 0 14px;
     padding-left: max(14px, env(safe-area-inset-left));
     padding-right: max(14px, env(safe-area-inset-right));
-    padding-top: env(safe-area-inset-top);
-    height: calc(52px + env(safe-area-inset-top));
+    padding-top: calc(env(safe-area-inset-top) + 10px);
+    height: calc(52px + env(safe-area-inset-top) + 10px);
+  }
+
+  .ticker {
+    top: calc(52px + env(safe-area-inset-top) + 10px);
   }
 
   .sh {
+    top: calc(80px + env(safe-area-inset-top) + 10px);
     padding: 8px 14px;
     padding-left: max(14px, env(safe-area-inset-left));
     padding-right: max(14px, env(safe-area-inset-right));
+  }
+
+  main {
+    margin-top: calc(120px + env(safe-area-inset-top) + 10px);
   }
 
   .tinner {
